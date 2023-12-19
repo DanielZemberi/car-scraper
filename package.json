@@ -9,7 +9,10 @@
   "author": "daniel",
   "license": "ISC",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
     "express": "^4.18.2",
-    "puppeteer": "^21.6.1"
+    "puppeteer": "^21.6.1",
+    "puppeteer-cluster": "^0.23.0",
+    "user-agents": "^1.1.58"
   }
 }
