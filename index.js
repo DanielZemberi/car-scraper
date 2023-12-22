@@ -25,12 +25,17 @@ async function hydrateDetailPage(previewList) {
 
   await cluster.task(async ({ page, data }) => {
     try {
+      console.log('1')
       const userAgent = new UserAgent();
+      console.log('2')
       await page.setUserAgent(userAgent.toString());
-      await page.goto(data.detailUrl, { timeout: 0 });
+      console.log('3')
+      await page.goto(data.detailUrl, { timeout: 5000 });
+      console.log('4')
       const htmlContent = await page.content();
       const $ = cheerio.load(htmlContent);
-
+      
+      console.log('5')
       const title = $(".title").text();
       const subtitle = $(".subtitle").text();
       const previewImg = $("#photoPanel").find("img").attr("src");
