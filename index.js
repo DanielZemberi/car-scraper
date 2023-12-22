@@ -126,8 +126,10 @@ async function getPreviewData(page, url) {
     };
     detailUrls.push(detailPageUrl);
     carsListPretty.push(carData);
-  });
 
+    console.log('aca',carData)
+  });
+console.log(carsListPretty)
   console.log(`Scraped total ${carsListPretty.length}`);
   return [carsListPretty, detailUrls];
 }
