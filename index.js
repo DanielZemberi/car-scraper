@@ -13,6 +13,11 @@ async function hydrateDetailPage(previewList) {
   const cluster = await Cluster.launch({
     concurrency: Cluster.CONCURRENCY_BROWSER,
     maxConcurrency: 5,
+    headless: true,
+    args: [
+        "--no-sandbox",
+        "--disable-gpu",
+    ]
   });
 
   await cluster.task(async ({ page, data }) => {
