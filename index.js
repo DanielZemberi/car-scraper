@@ -11,15 +11,14 @@ async function hydrateDetailPage(previewList) {
   console.log("Starting to hydrate detail pages");
 
   const cluster = await Cluster.launch({
-    concurrency: Cluster.CONCURRENCY_BROWSER,
-    maxConcurrency: 5,
+    concurrency: Cluster.CONCURRENCY_CONTEXT,
+    maxConcurrency: 2,
     puppeteerOptions: {
-
       headless: true,
       executablePath: '/usr/bin/google-chrome',
       args: [
-        "--no-sandbox",
-        "--disable-gpu",
+          "--no-sandbox",
+          "--disable-gpu",
       ]
     }
   });
