@@ -30,7 +30,7 @@ async function hydrateDetailPage(previewList) {
       console.log('2')
       await page.setUserAgent(userAgent.toString());
       console.log('3')
-      console.log('going to', data.detailPageUrl)
+      console.log('going to', data.detailUrl)
       await page.goto(data.detailUrl, { waitUntil: 'domcontentloaded' });
 
       console.log('4')
