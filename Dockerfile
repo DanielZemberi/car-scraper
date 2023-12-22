@@ -31,9 +31,10 @@ COPY package.json ./
 RUN npm install
 
 # Copy handler function and tsconfig
-COPY server.js ./
+COPY index.js ./
 
 # Expose app
 EXPOSE 3000
 
-CMD [ "node", "index.js" ]
+# Run app
+CMD ["node", "index.js"]

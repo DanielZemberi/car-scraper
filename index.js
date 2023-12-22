@@ -5,7 +5,7 @@ const UserAgent = require("user-agents");
 const express = require("express");
 
 const app = express();
-const port = 8080;
+const port = 3000;
 
 async function hydrateDetailPage(previewList) {
   console.log("Starting to hydrate detail pages");
@@ -13,11 +13,15 @@ async function hydrateDetailPage(previewList) {
   const cluster = await Cluster.launch({
     concurrency: Cluster.CONCURRENCY_BROWSER,
     maxConcurrency: 5,
-    headless: true,
-    args: [
+    puppeteerOptions: {
+
+      headless: true,
+      executablePath: '/usr/bin/google-chrome',
+      args: [
         "--no-sandbox",
         "--disable-gpu",
-    ]
+      ]
+    }
   });
 
   await cluster.task(async ({ page, data }) => {
@@ -122,11 +126,6 @@ async function getPreviewData(page, url) {
   return [carsListPretty, detailUrls];
 }
 
-
-app.get('/test', (req,res) => {
-  res.send('test')
-})
-
 app.get("/", async (req, res) => {
   let currentPage = 1;
   let totalPages = 2;
@@ -134,7 +133,7 @@ app.get("/", async (req, res) => {
   console.log("Starting script");
   const browser = await puppeteer.launch({
     headless: true,
-    executablePath: '/usr/bin/chromium-browser', // Path to Chromium executable
+    executablePath: '/usr/bin/google-chrome',
     args: [
         "--no-sandbox",
         "--disable-gpu",
