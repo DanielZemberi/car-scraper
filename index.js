@@ -131,7 +131,6 @@ app.get("/", async (req, res) => {
     headless: true,
     executablePath: '/usr/bin/chromium-browser',
     args: [
-        "--no-sandbox",
         "--disable-gpu",
     ]
 });
