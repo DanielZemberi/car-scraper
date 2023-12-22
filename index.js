@@ -117,6 +117,11 @@ async function getPreviewData(page, url) {
   return [carsListPretty, detailUrls];
 }
 
+
+app.get('/test', (req,res) => {
+  res.send('test')
+})
+
 app.get("/", async (req, res) => {
   let currentPage = 1;
   let totalPages = 2;
