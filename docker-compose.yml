@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: belan-cars-app:1.0.0
-    container_name: belan-cars-scraper-container
+    container_name: belan-cars-scraper-container2
     ports:
-      - "8080:8080"
+      - "3000:3000"
     restart: always

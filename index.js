@@ -1,8 +1,8 @@
-import cheerio from "cheerio";
-import puppeteer from "puppeteer";
-import { Cluster } from "puppeteer-cluster";
-import UserAgent from "user-agents";
-import express from 'express'
+const cheerio = require("cheerio");
+const puppeteer = require("puppeteer");
+const { Cluster } = require("puppeteer-cluster");
+const UserAgent = require("user-agents");
+const express = require("express");
 
 const app = express();
 const port = 8080;
@@ -65,7 +65,7 @@ async function hydrateDetailPage(previewList) {
   await cluster.close();
 }
 
- async function getPreviewData(page, url) {
+async function getPreviewData(page, url) {
   await page.goto(url, { waitUntil: "domcontentloaded" });
   console.log("inside getPreviewData");
 
@@ -117,44 +117,48 @@ async function hydrateDetailPage(previewList) {
   return [carsListPretty, detailUrls];
 }
 
-app.get('/', async (req, res) => {
-
+app.get("/", async (req, res) => {
   let currentPage = 1;
   let totalPages = 2;
-  
-    console.log("Starting script");
-    const browser = await puppeteer.launch({ headless: "new" });
-    console.log("Launching browser");
-    const page = await browser.newPage();
-    console.log("Opening page");
-    await page.setUserAgent(new UserAgent().toString());
-    console.log("Setting user agent");
-    let allCars = [];
-  
+
+  console.log("Starting script");
+  const browser = await puppeteer.launch({
+    headless: true,
+    executablePath: '/usr/bin/google-chrome',
+    args: [
+        "--no-sandbox",
+        "--disable-gpu",
+    ]
+});
+  console.log("Launching browser");
+  const page = await browser.newPage();
+  console.log("Opening page");
+  await page.setUserAgent(new UserAgent().toString());
+  console.log("Setting user agent");
+  let allCars = [];
+
+  const startTime = new Date().getTime();
+  while (currentPage <= totalPages) {
     const startTime = new Date().getTime();
-    while (currentPage <= totalPages) {
-      const startTime = new Date().getTime();
-  
-      const url = `https://en.m.autoplius.lt/ads?vip=1&order_by=3&page_nr=${currentPage}`;
-      console.log(`Starting loop #${currentPage}`);
-  
-      const [previewList] = await getPreviewData(page, url);
-      await hydrateDetailPage(previewList);
-      allCars = allCars.concat(previewList);
-      console.log("currPage", currentPage);
-      currentPage++;
-      const endTime = new Date().getTime();
-      const elapsedTime = endTime - startTime;
-      console.log(`First page took ${elapsedTime / 1000} seconds to complete.`);
-    }
+
+    const url = `https://en.m.autoplius.lt/ads?vip=1&order_by=3&page_nr=${currentPage}`;
+    console.log(`Starting loop #${currentPage}`);
+
+    const [previewList] = await getPreviewData(page, url);
+    await hydrateDetailPage(previewList);
+    allCars = allCars.concat(previewList);
+    console.log("currPage", currentPage);
+    currentPage++;
     const endTime = new Date().getTime();
     const elapsedTime = endTime - startTime;
-    console.log("Last Car", allCars[allCars.length - 1]);
-    console.log("Total Length", allCars.length);
-    console.log(`The while loop took ${elapsedTime / 1000} seconds to complete.`);
-    await browser.close();
-  
-
+    console.log(`First page took ${elapsedTime / 1000} seconds to complete.`);
+  }
+  const endTime = new Date().getTime();
+  const elapsedTime = endTime - startTime;
+  console.log("Last Car", allCars[allCars.length - 1]);
+  console.log("Total Length", allCars.length);
+  console.log(`The while loop took ${elapsedTime / 1000} seconds to complete.`);
+  await browser.close();
 
   res.send(allCars);
 });
