@@ -30,7 +30,8 @@ async function hydrateDetailPage(previewList) {
       console.log('2')
       await page.setUserAgent(userAgent.toString());
       console.log('3')
-      await page.goto(data.detailUrl, { timeout: 5000 });
+      await page.goto(data.detailUrl, { waitUntil: 'domcontentloaded' });
+
       console.log('4')
       const htmlContent = await page.content();
       const $ = cheerio.load(htmlContent);
